@@ -95,7 +95,7 @@ const MARQUEE_ITEMS = [
 
 const GLITCH_CHARS = 'ₐBCᴅEFGₕIJKLMₙOPQRSₜUVWXYZ0123456789@#$%&';
 
-function GlitchText({ text, className, tag: Tag = 'h2' }) {
+function GlitchText({ text, className, tag: Tag = 'h2' }: { text: string; className?: string; tag?: any }) {
   const [display, setDisplay] = useState(text);
   const [glitching, setGlitching] = useState(false);
   const iterRef = useRef(0), ivRef = useRef(null);
@@ -111,7 +111,7 @@ function GlitchText({ text, className, tag: Tag = 'h2' }) {
   return <Tag className={`${className} glitch-text`} onMouseEnter={startGlitch}>{display}</Tag>;
 }
 
-function TiltCard({ children, className, style, onClick, 'data-reveal': dr, isFlip=false, accentColor='#FF9933' }) {
+function TiltCard({ children, className, style, onClick, 'data-reveal': dr, isFlip=false, accentColor='#FF9933' }: { children?: any; className?: string; style?: any; onClick?: any; 'data-reveal'?: any; isFlip?: boolean; accentColor?: string }) {
   const ref = useRef(null);
   const [tilt, setTilt] = useState({x:0,y:0});
   const [shine, setShine] = useState({x:50,y:50});
@@ -137,21 +137,21 @@ function TiltCard({ children, className, style, onClick, 'data-reveal': dr, isFl
   );
 }
 
-function MagneticBtn({ children, className, onClick, style }) {
+function MagneticBtn({ children, className, onClick, style }: { children?: any; className?: string; onClick?: any; style?: any }) {
   const ref = useRef(null);
   const [off, setOff] = useState({x:0,y:0});
   const hm = e => { const r=ref.current.getBoundingClientRect(); const dx=e.clientX-(r.left+r.width/2),dy=e.clientY-(r.top+r.height/2); const d=Math.sqrt(dx*dx+dy*dy); if(d<80){const s=(80-d)/80; setOff({x:dx*s*0.45,y:dy*s*0.45});} };
   return <button ref={ref} className={className} style={{...style,transform:`translate(${off.x}px,${off.y}px)`,transition:off.x===0?'transform 0.5s cubic-bezier(0.34,1.56,0.64,1)':'transform 0.08s linear'}} onMouseMove={hm} onMouseLeave={()=>setOff({x:0,y:0})} onClick={onClick}>{children}</button>;
 }
 
-function TypewriterText({ text, className, visible }) {
+function TypewriterText({ text, className, visible }: { text: string; className?: string; visible?: boolean }) {
   const [displayed, setDisplayed] = useState('');
   const idxRef=useRef(0), startedRef=useRef(false);
   useEffect(()=>{ if(!visible||startedRef.current) return; startedRef.current=true; const iv=setInterval(()=>{ idxRef.current++; setDisplayed(text.slice(0,idxRef.current)); if(idxRef.current>=text.length) clearInterval(iv); },22); return()=>clearInterval(iv); },[visible,text]);
   return <p className={className}>{displayed}<span className="type-cursor">|</span></p>;
 }
 
-function CounterNum({ target, suffix='', decimals=0, visible }) {
+function CounterNum({ target, suffix='', decimals=0, visible }: { target: number; suffix?: string; decimals?: number; visible?: boolean }) {
   const [val, setVal] = useState(0); const startedRef=useRef(false);
   useEffect(()=>{ if(!visible||startedRef.current) return; startedRef.current=true; let cur=0; const iv=setInterval(()=>{ cur+=target/60; if(cur>=target){setVal(target);clearInterval(iv);}else setVal(cur); },1800/60); return()=>clearInterval(iv); },[visible,target]);
   return <>{decimals>0?val.toFixed(decimals):Math.floor(val).toLocaleString()}{suffix}</>;
@@ -183,7 +183,7 @@ function InteractiveGrid() {
   );
 }
 
-function OrbitStat({ value, label, color }) {
+function OrbitStat({ value, label, color }: { value: string; label: string; color: string }) {
   return (
     <div className="orbit-stat">
       <div className="orbit-outer" style={{borderColor:`${color}28`}}>
@@ -197,7 +197,7 @@ function OrbitStat({ value, label, color }) {
   );
 }
 
-function ThemeToggle({ theme, setTheme }) {
+function ThemeToggle({ theme, setTheme }: { theme: string; setTheme: (t: string) => void }) {
   const opts=[['system','⚙','System'],['light','☀️','Light'],['dark','🌙','Dark']];
   return (
     <div className="theme-toggle">
@@ -210,7 +210,7 @@ function ThemeToggle({ theme, setTheme }) {
   );
 }
 
-function CandidateCard({ c, onVote, setVoteParticles }) {
+function CandidateCard({ c, onVote, setVoteParticles }: { c: any; onVote: any; setVoteParticles: any }) {
   const [flipped, setFlipped] = useState(false);
   const total=2847+125756, pct=+(((c.votes/total)*100).toFixed(1));
   const handleVote=e=>{
