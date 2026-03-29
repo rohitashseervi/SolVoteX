@@ -649,7 +649,7 @@ export default function LandingPage() {
             </div>
           </div>
           <div className="footer-links">{['GitHub','Docs','Discord','Twitter','Solana Explorer','Whitepaper'].map(l=><a key={l} href="#" className="footer-link">{l}</a>)}</div>
-          <p className="footer-copy">© 2026 SolVoteX — Blockchain Voting System · CVR College of Engineering · Open Source MIT License</p>
+          <p className="footer-copy">© 2026 SolVoteX — Blockchain Voting System · CVR College of Engineering</p>
         </footer>
       </main>
     </div>
