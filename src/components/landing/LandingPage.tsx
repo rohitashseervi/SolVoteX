@@ -98,7 +98,7 @@ const GLITCH_CHARS = 'ₐBCᴅEFGₕIJKLMₙOPQRSₜUVWXYZ0123456789@#$%&';
 function GlitchText({ text, className, tag: Tag = 'h2' }: { text: string; className?: string; tag?: any }) {
   const [display, setDisplay] = useState(text);
   const [glitching, setGlitching] = useState(false);
-  const iterRef = useRef(0), ivRef = useRef(null);
+  const iterRef = useRef(0), ivRef = useRef<any>(null);
   const startGlitch = () => {
     if (glitching) return; setGlitching(true); iterRef.current = 0;
     ivRef.current = setInterval(() => {
