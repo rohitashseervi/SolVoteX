@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SolVoteX — Decentralized Voting on Solana</title>
+  <meta name="description" content="Blockchain-powered voting with full transparency, on-chain proof, and live vote counting on Solana. Powered by Walrus decentralized storage." />
+
+  <!-- UPDATE THIS to your Render frontend URL -->
+  <script>
+    const SOLVOTEX_APP_URL = "https://solvotex.onrender.com";
+  </script>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Share+Tech+Mono&family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet" />
+
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --saffron: #FF9933;
+      --green: #138808;
+      --navy: #06038D;
+      --blue: #4169e1;
+      --bg-dark: #02030a;
+      --bg-card: #0d0d1f;
+      --text-muted: #9898b0;
+    }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg-dark);
+      color: #fff;
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* === BACKGROUND EFFECTS === */
+    .bg-grid {
+      position: fixed; inset: 0; z-index: 0;
+      background-image:
+        linear-gradient(rgba(255,153,51,0.03) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,153,51,0.03) 1px, transparent 1px);
+      background-size: 60px 60px;
+    }
+
+    .bg-glow-1 {
+      position: fixed; top: -200px; right: -100px; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(255,153,51,0.08), transparent 70%);
+      filter: blur(80px); z-index: 0;
+    }
+    .bg-glow-2 {
+      position: fixed; bottom: -200px; left: -100px; width: 600px; height: 600px;
+      background: radial-gradient(circle, rgba(19,136,8,0.08), transparent 70%);
+      filter: blur(80px); z-index: 0;
+    }
+    .bg-glow-3 {
+      position: fixed; top: 40%; left: 50%; width: 400px; height: 400px;
+      transform: translate(-50%, -50%);
+      background: radial-gradient(circle, rgba(65,105,225,0.06), transparent 70%);
+      filter: blur(100px); z-index: 0;
+    }
+
+    /* === LAYOUT === */
+    .container {
+      position: relative; z-index: 1;
+      max-width: 900px; margin: 0 auto; padding: 2rem 1.5rem;
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+    }
+
+    /* === HEADER === */
+    .top-bar {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 10;
+      display: flex; align-items: center; justify-content: space-between;
+      padding: 1rem 2rem;
+      background: rgba(2,3,10,0.8); backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(255,153,51,0.1);
+    }
+    .top-bar .logo {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: 1.1rem; letter-spacing: 2px;
+    }
+    .top-bar .logo span:first-child { color: var(--saffron); }
+    .top-bar .logo span:last-child { color: var(--blue); }
+    .walrus-badge {
+      display: flex; align-items: center; gap: 6px;
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--text-muted); padding: 4px 12px;
+      border: 1px solid rgba(255,255,255,0.08); border-radius: 20px;
+      background: rgba(255,255,255,0.02);
+    }
+    .walrus-badge .dot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--green); box-shadow: 0 0 8px rgba(19,136,8,0.6);
+      animation: pulse 2s ease-in-out infinite;
+    }
+
+    /* === HERO === */
+    .hero { text-align: center; margin-top: 2rem; }
+
+    .flag-bar {
+      display: flex; width: 120px; height: 3px; margin: 0 auto 2rem;
+      border-radius: 2px; overflow: hidden;
+    }
+    .flag-bar div { flex: 1; }
+    .flag-bar div:nth-child(1) { background: var(--saffron); }
+    .flag-bar div:nth-child(2) { background: #fff; }
+    .flag-bar div:nth-child(3) { background: var(--green); }
+
+    .hero h1 {
+      font-family: 'Orbitron', sans-serif; font-weight: 900;
+      font-size: clamp(2.5rem, 6vw, 4rem); line-height: 1.1;
+      margin-bottom: 1.5rem;
+    }
+    .hero h1 .line1 { color: var(--saffron); display: block; }
+    .hero h1 .line2 { color: #fff; display: block; font-size: 0.6em; }
+
+    .hero .subtitle {
+      font-size: 1.05rem; color: var(--text-muted);
+      max-width: 550px; margin: 0 auto 2.5rem; line-height: 1.7;
+    }
+
+    /* === CTA BUTTON === */
+    .cta-btn {
+      display: inline-flex; align-items: center; gap: 10px;
+      padding: 16px 48px; border-radius: 12px; border: none;
+      font-family: 'Orbitron', sans-serif; font-weight: 700;
+      font-size: 1rem; letter-spacing: 2px; text-transform: uppercase;
+      color: #fff; cursor: pointer;
+      background: linear-gradient(135deg, var(--saffron), #e67e00);
+      box-shadow: 0 4px 40px rgba(255,153,51,0.4), 0 0 80px rgba(255,153,51,0.1);
+      transition: all 0.3s ease; text-decoration: none;
+    }
+    .cta-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 50px rgba(255,153,51,0.5), 0 0 120px rgba(255,153,51,0.15);
+    }
+    .cta-btn .arrow { transition: transform 0.3s; }
+    .cta-btn:hover .arrow { transform: translateX(4px); }
+
+    /* === FEATURE CARDS === */
+    .features {
+      display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 1rem; margin-top: 3rem; width: 100%;
+    }
+    .feature-card {
+      background: rgba(13,13,31,0.6); border: 1px solid rgba(255,255,255,0.06);
+      border-radius: 12px; padding: 1.5rem; text-align: center;
+      transition: all 0.3s;
+    }
+    .feature-card:hover {
+      border-color: rgba(255,153,51,0.2);
+      box-shadow: 0 0 30px rgba(255,153,51,0.05);
+    }
+    .feature-card .icon { font-size: 1.8rem; margin-bottom: 0.8rem; }
+    .feature-card h3 {
+      font-family: 'Orbitron', sans-serif; font-size: 0.7rem;
+      text-transform: uppercase; letter-spacing: 1.5px;
+      color: var(--saffron); margin-bottom: 0.5rem;
+    }
+    .feature-card p { font-size: 0.8rem; color: var(--text-muted); line-height: 1.6; }
+
+    /* === TECH STACK BAR === */
+    .tech-stack {
+      display: flex; align-items: center; gap: 1.5rem;
+      margin-top: 3rem; flex-wrap: wrap; justify-content: center;
+    }
+    .tech-pill {
+      font-family: 'Share Tech Mono', monospace;
+      font-size: 0.65rem; text-transform: uppercase; letter-spacing: 1px;
+      padding: 6px 14px; border-radius: 20px;
+      background: rgba(255,255,255,0.03); border: 1px solid rgba(255,255,255,0.06);
+      color: var(--text-muted);
+    }
+
+    /* === FOOTER === */
+    .footer {
+      margin-top: 3rem; text-align: center;
+      font-size: 0.7rem; color: #444; line-height: 1.8;
+    }
+    .footer a { color: var(--blue); text-decoration: none; }
+    .footer a:hover { text-decoration: underline; }
+
+    /* === ANIMATIONS === */
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.4; }
+    }
+    @keyframes fadeUp {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    .hero { animation: fadeUp 0.8s ease-out; }
+    .features { animation: fadeUp 1s ease-out 0.2s both; }
+    .tech-stack { animation: fadeUp 1s ease-out 0.4s both; }
+
+    /* === BLOCKCHAIN ANIMATION === */
+    .chain-visual {
+      display: flex; align-items: center; justify-content: center;
+      gap: 8px; margin: 2rem 0;
+    }
+    .chain-block {
+      width: 36px; height: 36px; border-radius: 6px;
+      display: flex; align-items: center; justify-content: center;
+      font-family: 'Share Tech Mono', monospace; font-size: 0.55rem;
+      animation: blockPulse 3s ease-in-out infinite;
+    }
+    .chain-block:nth-child(1) { background: rgba(255,153,51,0.15); color: var(--saffron); border: 1px solid rgba(255,153,51,0.3); animation-delay: 0s; }
+    .chain-block:nth-child(2) { background: rgba(19,136,8,0.15); color: var(--green); border: 1px solid rgba(19,136,8,0.3); animation-delay: 0.3s; }
+    .chain-block:nth-child(3) { background: rgba(65,105,225,0.15); color: var(--blue); border: 1px solid rgba(65,105,225,0.3); animation-delay: 0.6s; }
+    .chain-block:nth-child(4) { background: rgba(255,153,51,0.15); color: var(--saffron); border: 1px solid rgba(255,153,51,0.3); animation-delay: 0.9s; }
+    .chain-block:nth-child(5) { background: rgba(19,136,8,0.15); color: var(--green); border: 1px solid rgba(19,136,8,0.3); animation-delay: 1.2s; }
+
+    .chain-link {
+      width: 16px; height: 2px;
+      background: linear-gradient(90deg, rgba(255,153,51,0.4), rgba(19,136,8,0.4));
+      border-radius: 1px;
+    }
+
+    @keyframes blockPulse {
+      0%, 100% { transform: scale(1); opacity: 0.8; }
+      50% { transform: scale(1.1); opacity: 1; }
+    }
+
+    /* === RESPONSIVE === */
+    @media (max-width: 600px) {
+      .top-bar { padding: 0.8rem 1rem; }
+      .container { padding: 1rem; }
+      .cta-btn { padding: 14px 32px; font-size: 0.85rem; }
+      .features { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="bg-grid"></div>
+  <div class="bg-glow-1"></div>
+  <div class="bg-glow-2"></div>
+  <div class="bg-glow-3"></div>
+
+  <!-- Top Bar -->
+  <nav class="top-bar">
+    <div class="logo"><span>Sol</span><span>VoteX</span></div>
+    <div class="walrus-badge">
+      <span class="dot"></span>
+      Hosted on Walrus
+    </div>
+  </nav>
+
+  <div class="container">
+    <!-- Hero -->
+    <div class="hero">
+      <div class="flag-bar"><div></div><div></div><div></div></div>
+
+      <h1>
+        <span class="line1">SolVoteX</span>
+        <span class="line2">Decentralized Voting on Solana</span>
+      </h1>
+
+      <p class="subtitle">
+        Every vote is an on-chain transaction. Every choice is embedded in a Solana Memo.
+        No central authority can alter results. Transparent, verifiable, trustless.
+      </p>
+
+      <!-- Blockchain animation -->
+      <div class="chain-visual">
+        <div class="chain-block">BLK</div>
+        <div class="chain-link"></div>
+        <div class="chain-block">TX</div>
+        <div class="chain-link"></div>
+        <div class="chain-block">VOTE</div>
+        <div class="chain-link"></div>
+        <div class="chain-block">MEMO</div>
+        <div class="chain-link"></div>
+        <div class="chain-block">BLK</div>
+      </div>
+
+      <a class="cta-btn" href="#" id="launchBtn" onclick="launchApp(event)">
+        Launch App <span class="arrow">&rarr;</span>
+      </a>
+    </div>
+
+    <!-- Features -->
+    <div class="features">
+      <div class="feature-card">
+        <div class="icon">&#9939;</div>
+        <h3>On-Chain Votes</h3>
+        <p>SPL token transfer + Memo for every vote. Candidate choice is permanently written to Solana.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#128274;</div>
+        <h3>One Wallet, One Vote</h3>
+        <p>Phantom wallet signing ensures only verified voters can participate. No double voting possible.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#128200;</div>
+        <h3>Live Results</h3>
+        <p>Real-time vote counting with blockchain explorer. Every block is independently verifiable.</p>
+      </div>
+      <div class="feature-card">
+        <div class="icon">&#127760;</div>
+        <h3>Walrus Powered</h3>
+        <p>This gateway is hosted on Walrus decentralized storage. Censorship-resistant access to democracy.</p>
+      </div>
+    </div>
+
+    <!-- Tech Stack -->
+    <div class="tech-stack">
+      <span class="tech-pill">Solana Devnet</span>
+      <span class="tech-pill">SPL Tokens</span>
+      <span class="tech-pill">Phantom Wallet</span>
+      <span class="tech-pill">Memo Program</span>
+      <span class="tech-pill">Walrus Storage</span>
+    </div>
+
+    <!-- Footer -->
+    <div class="footer">
+      <p>Built with transparency in mind. Powered by Solana blockchain.</p>
+      <p>
+        <a href="https://explorer.solana.com/?cluster=devnet" target="_blank">Solana Explorer</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://phantom.app" target="_blank">Phantom Wallet</a>
+        &nbsp;&middot;&nbsp;
+        <a href="https://www.walrus.xyz" target="_blank">Walrus</a>
+      </p>
+    </div>
+  </div>
+
+  <script>
+    function launchApp(e) {
+      e.preventDefault();
+      window.location.href = SOLVOTEX_APP_URL;
+    }
+  </script>
+
+</body>
+</html>

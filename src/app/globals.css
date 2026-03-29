@@ -1,0 +1,130 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ═══════════════════════ BASE STYLES ═══════════════════════ */
+:root {
+  --saffron: #FF9933;
+  --indian-green: #138808;
+  --navy-blue: #06038D;
+  --chakra-blue: #4169e1;
+  --bg-primary: #0d0d1f;
+  --bg-secondary: #12122a;
+  --text-primary: #e8e8f0;
+  --text-secondary: #9898b0;
+}
+
+body {
+  background: var(--bg-primary);
+  color: var(--text-primary);
+  font-family: 'Inter', system-ui, -apple-system, sans-serif;
+}
+
+/* ═══════════════════════ SCROLLBAR ═══════════════════════ */
+::-webkit-scrollbar {
+  width: 6px;
+}
+::-webkit-scrollbar-track {
+  background: var(--bg-secondary);
+}
+::-webkit-scrollbar-thumb {
+  background: var(--saffron);
+  border-radius: 3px;
+}
+
+/* ═══════════════════════ WALLET ADAPTER OVERRIDES ═══════════════════════ */
+.wallet-adapter-button {
+  background: linear-gradient(135deg, var(--saffron), #e67e00) !important;
+  border-radius: 8px !important;
+  font-weight: 600 !important;
+  transition: all 0.3s ease !important;
+}
+.wallet-adapter-button:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(255, 153, 51, 0.4) !important;
+}
+
+/* ═══════════════════════ GLOW EFFECTS ═══════════════════════ */
+.glow-saffron {
+  box-shadow: 0 0 15px rgba(255, 153, 51, 0.3);
+}
+.glow-green {
+  box-shadow: 0 0 15px rgba(19, 136, 8, 0.3);
+}
+.glow-blue {
+  box-shadow: 0 0 15px rgba(65, 105, 225, 0.3);
+}
+
+/* ═══════════════════════ CARD STYLES ═══════════════════════ */
+.card-cyber {
+  background: rgba(18, 18, 42, 0.8);
+  border: 1px solid rgba(255, 153, 51, 0.15);
+  border-radius: 12px;
+  backdrop-filter: blur(10px);
+  transition: all 0.3s ease;
+}
+.card-cyber:hover {
+  border-color: rgba(255, 153, 51, 0.4);
+  box-shadow: 0 0 30px rgba(255, 153, 51, 0.1);
+}
+
+/* ═══════════════════════ ANIMATION UTILITIES ═══════════════════════ */
+@keyframes fadeInUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+@keyframes countUp {
+  from { opacity: 0; transform: scale(0.5); }
+  to { opacity: 1; transform: scale(1); }
+}
+@keyframes slideInLeft {
+  from { opacity: 0; transform: translateX(-30px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+@keyframes pulse-ring {
+  0% { transform: scale(1); opacity: 0.5; }
+  100% { transform: scale(1.5); opacity: 0; }
+}
+
+.animate-fadeInUp { animation: fadeInUp 0.6s ease forwards; }
+.animate-countUp { animation: countUp 0.4s ease forwards; }
+.animate-slideInLeft { animation: slideInLeft 0.5s ease forwards; }
+
+/* ═══════════════════════ LIVE INDICATOR ═══════════════════════ */
+.live-dot {
+  width: 8px;
+  height: 8px;
+  background: #22c55e;
+  border-radius: 50%;
+  display: inline-block;
+  animation: pulse-ring 1.5s infinite;
+}
+
+/* ═══════════════════════ VOTE BAR ═══════════════════════ */
+.vote-bar-container {
+  height: 24px;
+  background: rgba(255, 255, 255, 0.05);
+  border-radius: 12px;
+  overflow: hidden;
+  position: relative;
+}
+.vote-bar-fill {
+  height: 100%;
+  border-radius: 12px;
+  transition: width 0.8s cubic-bezier(0.4, 0, 0.2, 1);
+  position: relative;
+}
+.vote-bar-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255,255,255,0.1), transparent);
+  animation: shimmer 2s infinite;
+}
+@keyframes shimmer {
+  0% { transform: translateX(-100%); }
+  100% { transform: translateX(100%); }
+}
