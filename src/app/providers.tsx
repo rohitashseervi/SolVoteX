@@ -27,8 +27,11 @@ export function Providers({ children }: { children: ReactNode }) {
 
   return (
     <QueryClientProvider client={queryClient}>
+      {/* @ts-ignore - wallet adapter React type mismatch with React 18 */}
       <ConnectionProvider endpoint={RPC_ENDPOINT}>
+        {/* @ts-ignore */}
         <WalletProvider wallets={wallets} autoConnect>
+          {/* @ts-ignore */}
           <WalletModalProvider>
             <AuthProvider>{children}</AuthProvider>
           </WalletModalProvider>
