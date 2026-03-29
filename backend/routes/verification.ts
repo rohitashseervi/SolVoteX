@@ -1,6 +1,7 @@
 import { Router, Response } from "express";
 import multer from "multer";
 import path from "path";
+import fs from "fs";
 import User from "../models/User";
 import Poll from "../models/Poll";
 import { authMiddleware, AuthRequest } from "../middleware/auth";
@@ -8,10 +9,16 @@ import { transferSplToken } from "../utils/tokenTransfer";
 
 const router = Router();
 
+// Ensure uploads directory exists (critical for Render deployment)
+const uploadsDir = path.resolve(__dirname, "..", "uploads");
+if (!fs.existsSync(uploadsDir)) {
+  fs.mkdirSync(uploadsDir, { recursive: true });
+}
+
 // Multer config for voter ID image uploads
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    cb(null, path.join(__dirname, "..", "uploads"));
+    cb(null, uploadsDir);
   },
   filename: (req, file, cb) => {
     const uniqueName = `${Date.now()}-${Math.round(Math.random() * 1e9)}${path.extname(file.originalname)}`;
